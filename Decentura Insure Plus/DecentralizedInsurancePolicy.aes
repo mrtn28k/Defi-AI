@@ -1,0 +1,94 @@
+
+include "List.aes"
+
+contract DecentralizedInsurancePolicy =
+
+    record state = {
+        minimum_investment_standard: int, // 100 Ae required to be invested so policy can be start and premium paid out
+        premium_pays: int, // Amount of premiums to pay in divides (right now 10)
+        premium_percentage: int, // 10% of total invested
+        owner: address,
+        get_policy_info: map(string, policy_info),
+        available_Ipolicies: list(map(string, policy_info)), // Policy info with their id
+        total_of_available_Ipolicies: int
+     }
+    record policy_info = { // global record
+        name: string, // Like Life Insurance 121
+        risk_coverage: string,
+        min_coverage: int, // When added minimum coverage then users starts to pay premium
+        max_coverage: int, // When added maximum then nobody can invest more
+        premium_amount: int, // How much percent premium from investment
+        premium_times: int, // How much time premium needs to be paid
+        coverage_time: int // How much time it will cover for, Later all investors get back their money
+        }
+
+    stateful entrypoint init() =
+        {
+            minimum_investment_standard = 100, //AE
+            premium_pays = 10,
+            premium_percentage = 10,
+            owner = Call.caller,
+            get_policy_info = {},
+            total_of_available_Ipolicies = 2,
+            available_Ipolicies = []
+         }
+
+    // IPolicies Info etc.
+
+    stateful entrypoint list_available_Ipolicies() : list(map(string, policy_info)) =
+        state.available_Ipolicies
+
+    stateful entrypoint introduce_new_Ipolicy(_policyId: string, _name: string, _risk_coverage: string, _min_coverage: int, _max_coverage: int, _premium_amount: int, _premium_times: int, _coverage_time: int) : bool =
+        require(Call.caller == state.owner, "You are not owner")
+        require(String.length(_policyId) >= 1, "Please add a policy id")
+        require(String.length(_name) >= 1, "Please add a name")
+        require(String.length(_risk_coverage) >= 1, "Please add risks to cover")
+
+        require(_max_coverage >= 101, "Please cover atleast 100 AE")
+        require(_min_coverage >= 100, "Please cover atleast 100 AE")
+        require(_coverage_time >= 86400000, "Please cover for atleast a day") // In milliseconds
+        require(_premium_times > 1, "Please let user have atleast 2 premiums")
+        require(_premium_amount >= 10, "Please add attractive premium amount")
+
+        require(!Map.member(_policyId, state.get_policy_info), "Policy id already exists")
+
+        let make_policy : policy_info = {
+            name = _name, // Like Life Insurance 121
+            risk_coverage = _risk_coverage,
+            min_coverage = _min_coverage, // When added minimum coverage then users starts to pay premium
+            max_coverage = _max_coverage, // When added maximum then nobody can invest more
+            premium_amount = _premium_amount, // How much percent premium from investment
+            premium_times = _premium_times, // How much time premium needs to be paid
+            coverage_time = _coverage_time
+         }
+
+        put(state{total_of_available_Ipolicies = state.total_of_available_Ipolicies + 1})
+        put(state{available_Ipolicies @ a = ({[_policyId] = make_policy}) :: a})
+        put(state{get_policy_info[_policyId] = make_policy})
+        true
+
+    stateful entrypoint getPolicyDetails (_policy_id: string) : option(policy_info) = 
+        Map.lookup(_policy_id, state.get_policy_info)
+
+    stateful entrypoint getMinCoverage(_policy_id: string) : int =
+        state.get_policy_info[_policy_id].min_coverage
+
+    stateful entrypoint getMaxCoverage(_policy_id: string) : int =
+        state.get_policy_info[_policy_id].max_coverage
+
+    stateful entrypoint getPremiumAmount(_policy_id: string) : int =
+        state.get_policy_info[_policy_id].premium_amount
+
+    stateful entrypoint getPremiumTimes(_policy_id: string) : int =
+        state.get_policy_info[_policy_id].premium_times
+
+    stateful entrypoint getCoverageTime(_policy_id: string) : int =
+        state.get_policy_info[_policy_id].coverage_time
+    // ...
+
+    
+    
+
+    
+
+    

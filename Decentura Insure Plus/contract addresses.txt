@@ -1,0 +1,19 @@
+DigitalInsuranceClient= ct_xNVk7UPC1TZUzra1VanQDCd251bgBH6S4TKLRXnaRm7KBKSu3
+- create_new_client : jeevanjot, jeevanjotsingh@somedomain.com, http://url, I am a developer
+
+
+DecentralizedInsurancePolicy= ct_EaJeNcRmZSC79JkWoa7fd5qwiUtrcozEeAmCVmR1TU3puXhWf
+- introduce_new_Ipolicy : LIC_123, LIFE_INSURANCE_POLICY_123, Gonna Cover 123, 200, 205, 15, 5, 864000000
+
+
+MiddleAgents= ct_2s2HCciiggoND6VrUnCiqhneZCv87bes3BZurpFgUECMVhSmGo
+- register_for_agent : Jeevan, jeevanjot@somedomain.org, 12345678
+
+PolicyMaker= ct_2ksWUzmeBXSCN5WVaKL8TWuywiwCi3ryt6rRynQyJfG5VjqtRK
+- buy_policy : LIC_123, ak_NHpdMsULjYhpirh85QP1ZHQXGu9nNuXyQwSp9CaDFHCidVoHo
+
+----------------------------
+keys used for all these:
+
+public key: ak_NHpdMsULjYhpirh85QP1ZHQXGu9nNuXyQwSp9CaDFHCidVoHo
+secret key: cd71ad127e7cf10c54de09c7bcc00840505f4bf78e65f4ebb3214ed3196350ec305772bec2434c11c70d4a689b90a9df643b7a95cf31d43873a0f631b506d2d3

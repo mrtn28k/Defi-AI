@@ -1,0 +1,12 @@
+name: front-end
+emptyimage: false
+image: okteto/node:12
+command: bash
+sync:
+- .:/usr/src/app
+remote: 22007
+forward:
+- 9229:9229
+- 3000:3000
+- 8080:8080
+- 8081:8081

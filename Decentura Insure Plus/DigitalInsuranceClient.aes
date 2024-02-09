@@ -1,0 +1,33 @@
+
+contract DigitalInsuranceClient =
+
+        record state = {
+            clients : map(address, client_info),
+            all_clients: list(address)
+         }
+        record client_info = { // individual record
+            name : string, // User name
+            email : string, // User documents
+            other_docs : string, // User documents
+            description: string // User statements
+            }
+        stateful entrypoint init() = {
+            clients = {},
+            all_clients = []
+         }
+        stateful entrypoint create_new_client(_name: string, _email: string, _other_docs: string, _description: string) : bool = 
+            let ci : client_info = {
+                name = _name,
+                email = _email,
+                other_docs = _other_docs,
+                description = _description
+             }
+            put(state{clients[Call.caller] = ci})
+            put(state{all_clients @ ac = (Call.caller) :: ac})
+            true
+
+        stateful entrypoint getClientInfo(_address: address) : option(client_info) =
+            Map.lookup(_address, state.clients)
+        
+        stateful entrypoint getAllRegisteredClients(): list(address) =
+          state.all_clients
